@@ -50,7 +50,7 @@ export default function calculate(rfc12Digits: string): string {
       0
     )
   const reminder: number = sum % 11
-  if (reminder == 0) {
+  if (reminder === 0) {
     return '0'
   } else {
     return (11 - reminder).toString(16).toUpperCase() // from 1 to A (hex)
