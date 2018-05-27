@@ -44,11 +44,7 @@ export default function calculate(rfc12Digits: string): string {
   const sum: number = rfc12Digits
     .split('')
     .map(c => map[c.toUpperCase()] || 0)
-    .reduce(
-      (sum: number, current: number, index: number) =>
-        sum + current * (13 - index),
-      0
-    )
+    .reduce((sum, current, index) => sum + current * (13 - index), 0)
   const reminder: number = sum % 11
   if (reminder === 0) {
     return '0'

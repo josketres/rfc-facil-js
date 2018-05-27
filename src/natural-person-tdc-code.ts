@@ -7,7 +7,7 @@ export interface NaturalPerson {
   year: number
 }
 
-export function calculate(person: NaturalPerson): string {
+export function naturalPersonTenDigitsCode(person: NaturalPerson): string {
   return new NameCode(person).toString() + new BirthdayCode(person).toString()
 }
 
@@ -74,7 +74,7 @@ class NameCode {
   private getFilteredPersonName(): string {
     const normalized = this.normalize(this.person.name)
     if (this.person.name.split(' ').length > 1) {
-      return normalized.replace(/(?:^JOSE |^MARIA |^MA |^MA\. ?)/gi, '')
+      return normalized.replace(/^(JOSE|MARIA|MA|MA\.)\s+/i, '')
     }
     return normalized
   }

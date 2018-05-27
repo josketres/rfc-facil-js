@@ -71,8 +71,7 @@ function normalize(input: string): string {
 
 function sumPairsOfDigits(input: string): number {
   let sum: number = 0
-  let i: number = 0
-  for (i = 0; i < input.length - 1; i++) {
+  for (let i = 0; i < input.length - 1; i++) {
     let firstPair: number = parseInt(input.substring(i, i + 2), 10)
     let secondPair: number = parseInt(input.substring(i + 1, i + 2), 10)
     sum += firstPair * secondPair

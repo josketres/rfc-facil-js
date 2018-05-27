@@ -12,7 +12,7 @@
   "author": "Josue Zarzosa <josketres@gmail.com>",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/josketres/rfc-facil-js"
   },
   "license": "MIT",
   "engines": {
@@ -64,7 +64,7 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 90,
+        "branches": 80,
         "functions": 95,
         "lines": 95,
         "statements": 95
