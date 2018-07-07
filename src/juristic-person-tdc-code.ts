@@ -130,7 +130,6 @@ const threeDigitsCode = (words: string[]) => {
   } else if (words.length == 2) {
     return '' + words[0].charAt(0) + words[1].substring(0, 2)
   } else {
-    console.log(words)
     return firstThreeCharactersWithRightPad(words[0])
   }
 }
@@ -138,28 +137,14 @@ const threeDigitsCode = (words: string[]) => {
 const firstThreeCharactersWithRightPad = (word: string) =>
   word.length >= 3 ? word.substring(0, 3) : word.padEnd(3, 'X')
 
-const log = (i: any) => {
-  console.log(i)
-  return i
-}
-
 const nameCode: (input: string) => string = pipe(
-  log,
   normalize,
-  log,
   ignoreJuristicPersonTypeAbbreviations,
-  log,
   splitWords,
-  log,
   ignoreForbiddenWords,
-  log,
   markOneLetterAbbreviations,
-  log,
   expandSpecialCharactersInSingletonWord,
-  log,
   ignoreSpecialCharactersInWords,
-  log,
   splitOneLetterAbbreviations,
-  log,
   threeDigitsCode
 )
