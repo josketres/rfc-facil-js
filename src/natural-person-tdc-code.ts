@@ -1,3 +1,6 @@
+import { dateCode } from './date-code'
+import { removeAccents } from './common'
+
 export interface NaturalPerson {
   name: string
   firstLastName: string
@@ -8,7 +11,7 @@ export interface NaturalPerson {
 }
 
 export function naturalPersonTenDigitsCode(person: NaturalPerson): string {
-  return new NameCode(person).toString() + new BirthdayCode(person).toString()
+  return new NameCode(person).toString() + birthdayCode(person)
 }
 
 // matches any ocurrence of the special particles as a word: '^foo | foo | foo$''
@@ -20,6 +23,10 @@ const specialParticlesRegex: RegExp = new RegExp(
     ')',
   'g'
 )
+
+function birthdayCode(person: NaturalPerson): string {
+  return dateCode(person.day, person.month, person.year)
+}
 
 class NameCode {
   private filteredPersonName: string
@@ -52,9 +59,7 @@ class NameCode {
     } else {
       return (
         this.normalize(this.person.firstLastName).charAt(0) +
-        this.firstVowelExcludingFirstCharacterOf(
-          this.normalize(this.person.firstLastName)
-        ) +
+        this.firstVowelExcludingFirstCharacterOf(this.normalize(this.person.firstLastName)) +
         this.normalize(this.person.secondLastName).charAt(0) +
         this.filteredPersonName.charAt(0)
       )
@@ -65,8 +70,7 @@ class NameCode {
     const match =
       s.match(
         /(BUE[IY]|CAC[AO]|CAGA|KOGE|KAKA|MAME|KOJO|[KQ]ULO|CAGO|CO[GJ]E|COJO|FETO|JOTO|KA[CG]O)/
-      ) ||
-      s.match(/(MAMO|MEAR|M[EI]ON|MOCO|MULA|PED[AO]|PENE|PUT[AO]|RATA|RUIN)/)
+      ) || s.match(/(MAMO|MEAR|M[EI]ON|MOCO|MULA|PED[AO]|PENE|PUT[AO]|RATA|RUIN)/)
     return match ? s.substring(0, 3) + 'X' : s
   }
 
@@ -80,7 +84,7 @@ class NameCode {
   }
 
   private normalize(s: string): string {
-    return this.removeAccents(s.toUpperCase())
+    return removeAccents(s.toUpperCase())
       .replace(/\s+/g, '  ') // double space to allow multiple special-particles matching
       .replace(specialParticlesRegex, '')
       .replace(/\s+/g, ' ') // reset space
@@ -100,28 +104,6 @@ class NameCode {
   }
 
   private isEmpty(s: string): boolean {
-    return (
-      s === null || typeof s === 'undefined' || this.normalize(s).length === 0
-    )
-  }
-
-  private removeAccents(input: string): string {
-    return input.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-  }
-}
-
-class BirthdayCode {
-  constructor(private person: NaturalPerson) {}
-
-  toString(): string {
-    return (
-      this.person.year.toString().slice(-2) +
-      this.zeroPadded(this.person.month) +
-      this.zeroPadded(this.person.day)
-    )
-  }
-
-  private zeroPadded(n: number): string {
-    return ('00' + n).slice(-2)
+    return s === null || typeof s === 'undefined' || this.normalize(s).length === 0
   }
 }

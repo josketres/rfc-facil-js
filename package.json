@@ -98,6 +98,7 @@
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-typescript2": "^0.11.1",
+    "roman-numerals": "^0.3.2",
     "semantic-release": "^15.0.0",
     "ts-jest": "^22.0.0",
     "ts-node": "^6.0.0",
@@ -106,6 +107,7 @@
     "tslint-config-standard": "^7.0.0",
     "typedoc": "^0.11.0",
     "typescript": "^2.6.2",
-    "validate-commit-msg": "^2.12.2"
+    "validate-commit-msg": "^2.12.2",
+    "written-number": "^0.8.1"
   }
 }
