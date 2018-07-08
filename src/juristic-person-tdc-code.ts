@@ -8,9 +8,6 @@ export interface JuristicPerson {
   year: number
 }
 
-export const juristicPersonTenDigitsCode = (person: JuristicPerson): string =>
-  nameCode(person.name) + dateCode(person.day, person.month, person.year)
-
 const pipe = (...ops: any[]) => ops.reduce((a: any, b: any) => (arg: any) => b(a(arg)))
 
 const toUpperCase = (s: string) => s.toUpperCase()
@@ -25,19 +22,21 @@ const normalize: (input: string) => string = pipe(
 
 const ignoreJuristicPersonTypeAbbreviations = (input: string) =>
   input
-    .replace(/S\.?\s?EN\s?N\.?\s?C\.?/g, '')
-    .replace(/S\.?\s?EN\s?C\.?\s?POR\s?A\.?/g, '')
-    .replace(/S\.?\s?EN\s?C\.?/g, '')
-    .replace(/S\.?\s?DE\s?R\.?\s?L\.?/g, '')
-    .replace(/S\.?\s?DE\s?R\.?\s?L\.?\s?DE\s?C\.?\s?V\.?/g, '')
-    .replace(/S\.?\s?A\.?\s?DE\s?C\.?\s?V\.?/g, '')
-    .replace(/A\.?\s?EN\s?P\.?/, '')
-    .replace(/S\.?\s?C\.?\s?[LPS]\.?/, '')
-    .replace(/S\.?\s?[AC]\.?/, '')
-    .replace(/S\.?\s?N\.?\s?C\.?/, '')
-    .replace(/A\.?\s?C\.?/, '')
+    .replace(/S\.?\s?EN\s?N\.?\s?C\.?$/g, '')
+    .replace(/S\.?\s?EN\s?C\.?\s?POR\s?A\.?$/g, '')
+    .replace(/S\.?\s?EN\s?C\.?$/g, '')
+    .replace(/S\.?\s?DE\s?R\.?\s?L\.?$/g, '')
+    .replace(/S\.?\s?DE\s?R\.?\s?L\.?\s?DE\s?C\.?\s?V\.?$/g, '')
+    .replace(/S\.?\s?A\.?\s?DE\s?C\.?\s?V\.?$/g, '')
+    .replace(/A\.?\s?EN\s?P\.?$/g, '')
+    .replace(/S\.?\s?C\.?\s?[LPS]\.?$/g, '')
+    .replace(/S\.?\s?[AC]\.?$/g, '')
+    .replace(/S\.?\s?N\.?\s?C\.?$/g, '')
+    .replace(/A\.?\s?C\.?$/g, '')
 
-const splitWords = (input: string) => input.split(/[,\s]+/)
+const removeEmptyWords = (w: string) => w.length > 0
+
+const splitWords = (input: string) => input.split(/[,\s]+/).filter(removeEmptyWords)
 
 /*
 * This list is based on Anexo V from the official documentation
@@ -45,7 +44,6 @@ const splitWords = (input: string) => input.split(/[,\s]+/)
 * the same documentation contradict the list
 */
 const forbiddenWords = [
-  '',
   'EL',
   'LA',
   'DE',
@@ -90,27 +88,26 @@ const ignoreForbiddenWords = (words: string[]) =>
   words.filter((w: string) => forbiddenWords.indexOf(w) === -1)
 
 const markOneLetterAbbreviations = (words: string[]) =>
-  words.map((w: string) => w.replace(/^([^.])\./g, '$1AABBRREEVVIIAATTIIOONN'))
+  words.map((w: string) => w.replace(/([^.])\./g, '$1AABBRREEVVIIAATTIIOONN'))
 
 const expandSpecialCharactersInSingletonWord = (words: string[]) => {
   if (words.length === 1) {
-    return [
-      words[0]
-        .replace('@', 'ARROBA')
-        .replace('´', 'APOSTROFE')
-        .replace('%', 'PORCIENTO')
-        .replace('#', 'NUMERO')
-        .replace('!', 'ADMIRACION')
-        .replace('.', 'PUNTO')
-        .replace('$', 'PESOS')
-        .replace('"', 'COMILLAS')
-        .replace('-', 'GUION')
-        .replace('/', 'DIAGONAL')
-        .replace('+', 'SUMA')
-        .replace('(', 'ABRE PARENTESIS')
-        .replace(')', 'CIERRA PARENTESIS')
-        .split(' ')
-    ]
+    return words[0]
+      .replace('@', 'ARROBA')
+      .replace('´', 'APOSTROFE')
+      .replace('%', 'PORCIENTO')
+      .replace('#', 'NUMERO')
+      .replace('!', 'ADMIRACION')
+      .replace('.', 'PUNTO')
+      .replace('$', 'PESOS')
+      .replace('"', 'COMILLAS')
+      .replace('-', 'GUION')
+      .replace('/', 'DIAGONAL')
+      .replace('+', 'SUMA')
+      .replace('(', 'ABRE PARENTESIS')
+      .replace(')', 'CIERRA PARENTESIS')
+      .split(' ')
+      .filter(removeEmptyWords)
   }
   return words
 }
@@ -120,7 +117,7 @@ const ignoreSpecialCharactersInWords = (words: string[]) =>
 
 const splitOneLetterAbbreviations = (words: string[]) =>
   words.reduce((acc: string[], w: string) => {
-    acc.push(...w.split('AABBRREEVVIIAATTIIOONN'))
+    acc.push(...w.split('AABBRREEVVIIAATTIIOONN').filter(removeEmptyWords))
     return acc
   }, [])
 
@@ -148,3 +145,6 @@ const nameCode: (input: string) => string = pipe(
   splitOneLetterAbbreviations,
   threeDigitsCode
 )
+
+export const juristicPersonTenDigitsCode = (person: JuristicPerson): string =>
+  nameCode(person.name) + dateCode(person.day, person.month, person.year)
