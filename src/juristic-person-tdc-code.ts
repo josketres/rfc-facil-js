@@ -1,6 +1,9 @@
 import { dateCode } from './date-code'
 import { removeAccents } from './common'
 
+const writtenNumber = require('written-number')
+const romanNumerals = require('roman-numerals')
+
 export interface JuristicPerson {
   name: string
   day: number
@@ -8,7 +11,15 @@ export interface JuristicPerson {
   year: number
 }
 
+// higher order function
 const pipe = (...ops: any[]) => ops.reduce((a: any, b: any) => (arg: any) => b(a(arg)))
+
+// higher order function
+const flatMap = (fn: { (w: string): string[] }) => (words: string[]) =>
+  words.reduce((acc: string[], w: string) => {
+    acc.push(...fn(w))
+    return acc
+  }, [])
 
 const toUpperCase = (s: string) => s.toUpperCase()
 
@@ -88,11 +99,11 @@ const ignoreForbiddenWords = (words: string[]) =>
   words.filter((w: string) => forbiddenWords.indexOf(w) === -1)
 
 const markOneLetterAbbreviations = (words: string[]) =>
-  words.map((w: string) => w.replace(/([^.])\./g, '$1AABBRREEVVIIAATTIIOONN'))
+  words.map((w: string) => w.replace(/^([^.])\./g, '$1AABBRREEVVIIAATTIIOONN'))
 
-const expandSpecialCharactersInSingletonWord = (words: string[]) => {
-  if (words.length === 1) {
-    return words[0]
+const expandSpecialCharactersInSingletonWord = flatMap((w: string) => {
+  if (w.length === 1) {
+    return w
       .replace('@', 'ARROBA')
       .replace('´', 'APOSTROFE')
       .replace('%', 'PORCIENTO')
@@ -109,22 +120,40 @@ const expandSpecialCharactersInSingletonWord = (words: string[]) => {
       .split(' ')
       .filter(removeEmptyWords)
   }
-  return words
-}
+  return [w]
+})
 
 const ignoreSpecialCharactersInWords = (words: string[]) =>
-  words.map(w => w.replace('(.+?)[@´%#!.$"-/+()](.+?)', '$1$2'))
+  words.map(w => w.replace(/(.+?)[@´%#!.$"-/+()](.+?)/g, '$1$2'))
 
-const splitOneLetterAbbreviations = (words: string[]) =>
-  words.reduce((acc: string[], w: string) => {
-    acc.push(...w.split('AABBRREEVVIIAATTIIOONN').filter(removeEmptyWords))
-    return acc
-  }, [])
+const splitOneLetterAbbreviations = flatMap((w: string) =>
+  w.split('AABBRREEVVIIAATTIIOONN').filter(removeEmptyWords)
+)
+
+const expandSingleArabicNumeral = (numeral: string) =>
+  writtenNumber(parseInt(numeral, 10), { lang: 'es' })
+    .toUpperCase()
+    .split(/\s/)
+    .filter(removeEmptyWords)
+
+const expandArabicNumerals = flatMap((word: string) => {
+  if (word.match(/[0-9]+/)) {
+    return expandSingleArabicNumeral(word)
+  }
+  return [word]
+})
+
+const expandRomanNumerals = flatMap((word: string) => {
+  if (word.match(/^(M{0,4})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/)) {
+    return expandSingleArabicNumeral(romanNumerals.toArabic(word))
+  }
+  return [word]
+})
 
 const threeDigitsCode = (words: string[]) => {
   if (words.length >= 3) {
     return '' + words[0].charAt(0) + words[1].charAt(0) + words[2].charAt(0)
-  } else if (words.length == 2) {
+  } else if (words.length === 2) {
     return '' + words[0].charAt(0) + words[1].substring(0, 2)
   } else {
     return firstThreeCharactersWithRightPad(words[0])
@@ -143,6 +172,8 @@ const nameCode: (input: string) => string = pipe(
   expandSpecialCharactersInSingletonWord,
   ignoreSpecialCharactersInWords,
   splitOneLetterAbbreviations,
+  expandArabicNumerals,
+  expandRomanNumerals,
   threeDigitsCode
 )
 
