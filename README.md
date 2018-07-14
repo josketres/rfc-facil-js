@@ -1,7 +1,7 @@
 # rfc-facil-js
 Librería para calcular el Registro Federal de Contribuyentes en México (RFC) - Javascript
 
-[![Build Status](https://travis-ci.org/josketres/rfc-facil-js.svg?branch=master)](https://travis-ci.org/josketres/rfc-facil-js)
+[![Build Status](https://travis-ci.org/josketres/rfc-facil-js.svg?branch=master)](https://travis-ci.org/josketres/rfc-facil-js) [![npm version](https://badge.fury.io/js/gulp-up-and-running.svg)](https://badge.fury.io/js/gulp-up-and-running)
 
 Instalación
 ---
@@ -26,3 +26,17 @@ const rfc: string = RfcFacil.forNaturalPerson({
 });
 console.log(rfc); // ZATJ870805CK6
 ```
+
+Calcular el rfc de una persona moral:
+```typescript
+// persona moral con razon-social Sonora Industrial Azucarera, S. de R. L.
+// y fecha de creacion del 20 de Noviembre de 1982
+const rfc: string = RfcFacil.forJuristicPerson({
+  name: 'Sonora Industrial Azucarera, S. de R. L.',
+  day: 29,
+  month: 11,
+  year: 1982
+});
+console.log(rfc); // SIA-821129LS8
+```
+
