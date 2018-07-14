@@ -19,6 +19,17 @@ describe('rfc', () => {
       'AECS211112JPA'
     )
   })
+
+  it('should_build_rfc_for_a_juristic_person', () => {
+    expect(
+      RfcFacil.forJuristicPerson({
+        name: 'AUTOS PULLMAN, S.A. DE C.V.',
+        day: 30,
+        month: 9,
+        year: 1964
+      })
+    ).toEqual('APU640930KV9')
+  })
 })
 
 function person(
