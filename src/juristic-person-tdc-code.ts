@@ -1,8 +1,9 @@
 import { dateCode } from './date-code'
 import { removeAccents } from './common'
-
-const writtenNumber = require('written-number')
-const romanNumerals = require('roman-numerals')
+// @ts-ignore
+import writtenNumber from 'written-number'
+// @ts-ignore
+import romanNumerals from 'roman-numerals'
 
 export interface JuristicPerson {
   name: string

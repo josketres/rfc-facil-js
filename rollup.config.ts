@@ -12,19 +12,19 @@ const libraryName = 'rfc-facil'
 export default {
   input: `src/${libraryName}.ts`,
   output: [
-    {file: pkg.main, name: camelCase(libraryName), format: 'umd', sourcemap: true},
-    {file: pkg.module, format: 'es', sourcemap: true},
+    { file: pkg.main, name: camelCase(libraryName), format: 'umd', sourcemap: true },
+    { file: pkg.module, format: 'es', sourcemap: true }
   ],
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
   external: [],
   watch: {
-    include: 'src/**',
+    include: 'src/**'
   },
   plugins: [
     // Allow json resolution
     json(),
     // Compile TypeScript files
-    typescript({useTsconfigDeclarationDir: true}),
+    typescript({ useTsconfigDeclarationDir: true }),
     // Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
     commonjs(),
     // Allow node_modules resolution, so you can use 'external' to control
@@ -33,6 +33,6 @@ export default {
     resolve(),
 
     // Resolve source maps to the original source
-    sourceMaps(),
-  ],
+    sourceMaps()
+  ]
 }
