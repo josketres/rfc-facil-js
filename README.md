@@ -1,7 +1,7 @@
 # rfc-facil-js
 Librería para calcular el Registro Federal de Contribuyentes en México (RFC) - Javascript
 
-[![Build Status](https://travis-ci.org/josketres/rfc-facil-js.svg?branch=master)](https://travis-ci.org/josketres/rfc-facil-js) [![npm version](https://badge.fury.io/js/gulp-up-and-running.svg)](https://badge.fury.io/js/gulp-up-and-running)
+[![Build Status](https://travis-ci.org/josketres/rfc-facil-js.svg?branch=master)](https://travis-ci.org/josketres/rfc-facil-js) 
 
 Instalación
 ---
