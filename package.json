@@ -4,15 +4,15 @@
   "description": "",
   "keywords": [],
   "main": "dist/rfc-facil.umd.js",
-  "module": "dist/rfc-facil.es5.js",
+  "module": "dist/rfc-facil.es5",
   "typings": "dist/types/rfc-facil.d.ts",
   "files": [
     "dist"
   ],
-  "author": "Josue Zarzosa <josketres@gmail.com>",
+  "author": "Alvaro Martinez <alvaromashiro@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/josketres/rfc-facil-js"
+    "url": "https://github.com/alvaromashiro/rfc-facil-js"
   },
   "license": "MIT",
   "engines": {
