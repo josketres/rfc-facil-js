@@ -30,6 +30,12 @@ describe('rfc', () => {
       })
     ).toEqual('APU640930KV9')
   })
+
+  it('should build rfc for a natural person without vowel', () => {
+    expect(RfcFacil.forNaturalPerson(person('MARIA SALOME', 'ELYD', 'SAENZ', 20, 1, 1958))).toEqual(
+      'EXSS580120937'
+    )
+  })
 })
 
 function person(

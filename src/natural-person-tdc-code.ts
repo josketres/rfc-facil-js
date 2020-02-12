@@ -94,7 +94,7 @@ class NameCode {
   private firstVowelExcludingFirstCharacterOf(s: string): string {
     let result: RegExpExecArray | null = /[aeiou]/i.exec(s.slice(1))
     if (!result) {
-      throw new Error('')
+      return 'X'
     }
     return result[0]
   }
