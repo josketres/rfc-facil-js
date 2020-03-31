@@ -127,6 +127,12 @@ describe('ten-digits-code (tdc-code) calculator', () => {
       naturalPersonTenDigitsCode(person('Marco Antonio', 'Cano', 'Barraza', 13, 12, 1970))
     ).toEqual('CABM701213')
   })
+
+  it('should replace with X if lastname hasnt intern Vowel', () => {
+    expect(naturalPersonTenDigitsCode(person('Andres', 'Ich', 'Rodriguez', 13, 12, 1970))).toEqual(
+      'IXRA701213'
+    )
+  })
 })
 
 function person(
